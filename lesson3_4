@@ -1,1 +1,223 @@
+# Cicl for
+def factorial (n):
+    if n == 0:
+        return 1
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+print(factorial(6))
+
+#Corteg
+numbers=(1,2,7,120,224,80)
+print(max(numbers))
+
+def triangle_area(cathetus1, cathetus2):
+    return 0.5 * cathetus1 * cathetus2
+
+# Расчёт площади прямоугольного треугольника
+cathetus1 = 7
+cathetus2 = 5
+print(f"Площадь треугольника с катетами {cathetus1} и {cathetus2} равна {triangle_area(cathetus1, cathetus2)}")
+
+# Задание на формирование шапки
+import sys
+from lesson_2_data import courts
+
+
+def generate_header(defendant):
+    # Данные истца
+    plaintiff = {
+        'full_name': 'Савинский Виталий Сергеевич',
+        'address': 'Комарово, Солнечный пляж, дом 12',
+        'inn': '1234567890',
+        'ogrn': '9876543210',
+    }
+
+    # Извлечение номера дела и кода суда из данных ответчика
+    case_number = defendant['case_number']
+    court_code = case_number.split('-')[0]
+
+    # Поиск информации о суде по коду суда
+    court_info = None
+    for court in courts:
+        if court['court_code'] == court_code:
+            court_info = court
+            break
+
+    if not court_info:
+        return "Суд не найден."
+
+    # Заполнение шаблона для шапки
+    header = f"""В {court_info['court_name']}
+    
+Адрес: {court_info['court_address']}
+
+Номер дела {defendant['case_number']}
+
+Истец: {plaintiff['full_name']}
+ИНН {plaintiff['inn']} ОГРН {plaintiff['ogrn']}
+Адрес: {plaintiff['address']}
+
+Ответчик: {defendant['full_name']}
+ИНН {defendant['inn']} ОГРН {defendant['ogrn']}
+Адрес: {defendant['address']}
+
+"""
+
+    return header
+
+
+# Данные ответчика
+respondent = {
+    'full_name': 'ООО "Энергия"',
+    'inn': '5320016880',
+    'ogrn': '1035300713282',
+    'address': '174409, Новгородская обл, Боровичский р-н, г Боровичи, ул Песочная, д 30',
+    'case_number': 'А03-123456/2023'
+}
+
+# Генерация шапки
+header = generate_header(respondent)
+print(header)
+
+
+# Функция генерации шапки
+def generate_header(defendant):
+    # Данные истца
+    plaintiff = {
+        'full_name': 'Савинский Виталий Сергеевич',
+        'address': 'Комарово, Солнечный пляж, дом 12',
+        'inn': '1234567890',
+        'ogrn': '9876543210',
+    }
+
+    # Извлечение номера дела и кода суда из данных ответчика
+    case_number = defendant['case_number']
+    court_code = case_number.split('-')[0]  # Извлекаем код суда из номера дела
+
+    # Поиск информации о суде по коду суда
+    court_info = None
+    for court in courts:
+        if court['court_code'] == court_code:
+            court_info = court
+            break
+
+    if not court_info:
+        return "Суд не найден."
+
+    # Формирование шапки для документа
+    header = f"""В арбитражный суд {court_info['court_name']}
+Адрес: {court_info['court_address']}
+
+Истец: {plaintiff['full_name']}
+ИНН {plaintiff['inn']} ОГРН {plaintiff['ogrn']}
+Адрес: {plaintiff['address']}
+
+Ответчик: {defendant['full_name']}
+ИНН {defendant['inn']} ОГРН {defendant['ogrn']}
+Адрес: {defendant['address']}
+
+Номер дела {defendant['case_number']}
+"""
+    return header
+
+
+# Новая функция, которая принимает список ответчиков
+def generate_all_headers(respondents):
+    # Проходим по каждому ответчику и генерируем шапку
+    for respondent in respondents:
+        header = generate_header(respondent)
+        print(header)
+        print("-" * 80)  # Разделитель между шапками для разных ответчиков
+
+
+# Пример данных ответчиков (список словарей)
+respondents = [
+    {'full_name': 'ООО "Энергия"', 'inn': '5320016880', 'ogrn': '1035300713282',
+     'address': '174409, Новгородская обл, Боровичский р-н, г Боровичи, ул Песочная, д 30',
+     'case_number': 'А44-9417/2018'},
+    {'full_name': 'ООО "ШОМРАТ ХАУС"', 'inn': '7732005842', 'ogrn': '1037700179857',
+     'address': '119634, ГОРОД МОСКВА, УЛ. ШОЛОХОВА, Д. 13', 'case_number': 'А40-81007/2019'},
+    # Добавьте больше ответчиков по необходимости
+]
+
+# Вызов функции для генерации шапок всех ответчиков
+generate_all_headers(respondents)
+
+#Задание 4
+# Вспомогательная функция для вычисления контрольного числа для организации (10 знаков)
+def check_inn_organization(inn: str) -> bool:
+    # Коэффициенты для организации
+    coefficients = [2, 4, 10, 3, 5, 9, 4, 6, 8]
+
+    # Вычисление контрольной суммы
+    sum_control = sum(int(inn[i]) * coefficients[i] for i in range(9))
+
+    # Вычисление контрольного числа
+    control_digit = sum_control % 11
+    if control_digit > 9:
+        control_digit = control_digit % 10
+
+    # Проверка контрольного числа
+    return int(inn[9]) == control_digit
+
+
+# Вспомогательная функция для вычисления контрольных чисел для физического лица или ИП (12 знаков)
+def check_inn_individual(inn: str) -> bool:
+    # Коэффициенты для физического лица
+    coefficients_1 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8]
+    coefficients_2 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8]
+
+    # Вычисление первого контрольного числа
+    sum_control_1 = sum(int(inn[i]) * coefficients_1[i] for i in range(10))
+    control_digit_1 = sum_control_1 % 11
+    if control_digit_1 > 9:
+        control_digit_1 = control_digit_1 % 10
+
+    # Проверка первого контрольного числа
+    if int(inn[10]) != control_digit_1:
+        return False
+
+    # Вычисление второго контрольного числа
+    sum_control_2 = sum(int(inn[i]) * coefficients_2[i] for i in range(11))
+    control_digit_2 = sum_control_2 % 11
+    if control_digit_2 > 9:
+        control_digit_2 = control_digit_2 % 10
+
+    # Проверка второго контрольного числа
+    return int(inn[11]) == control_digit_2
+
+
+# Основная функция для проверки ИНН
+def validate_inn(inn: str) -> bool:
+    # Удаляем все ненужные пробелы
+    inn = inn.replace(" ", "")
+
+    # Проверяем, что ИНН состоит только из цифр и имеет правильную длину
+    if not inn.isdigit():
+        return False
+
+    # Проверка ИНН для организаций (10 цифр)
+    if len(inn) == 10:
+        return check_inn_organization(inn)
+
+    # Проверка ИНН для физического лица или ИП (12 цифр)
+    elif len(inn) == 12:
+        return check_inn_individual(inn)
+
+    # В любом другом случае ИНН некорректен
+    return False
+
+
+# Пример использования:
+inns = [
+    "5320016880",  # Пример ИНН организации
+    "7706271037",  # Пример ИНН физического лица
+    "123456789012",  # Некорректный ИНН
+]
+
+for inn in inns:
+    print(f"ИНН: {inn} - {'Правильный' if validate_inn(inn) else 'Неправильный'}")
 
