@@ -1,1 +1,83 @@
+# Lesson-7
+#Реализуйте класс CourtCase.
 
+#При вызове метода конструктора экземпляра (__init__) должны создаваться следующие атрибуты экземпляра:
+# case_number (строка с номером дела — обязательный параметр) передаётся в качестве аргумента при создании экземпляра
+# case_participants (список по умолчанию пустой)
+# listening_datetimes (список по умолчанию пустой)
+# is_finished (значение по умолчанию False)
+# verdict (строка по умолчанию пустая)
+#
+# У экземпляра должны быть следующие методы:
+# set_a_listening_datetime — добавляет в список listening_datetimes судебное заседание (структуру можете придумать сами)
+# add_participant — добавляет участника в список case_participants (можно просто ИНН)
+# remove_participant — убирает участника из списка case_participants
+# make_a_decision — вынести решение по делу, добавить verdict и сменить атрибут is_finished на True
+
+#1. ClassCourte
+
+
+class CourtCase:
+# При вызове метода конструктора экземпляра (__init__) должны создаваться следующие атрибуты экземпляра:
+    def __init__(self, case_number: str):
+        self.case_number = case_number
+        self.case_participants = []
+        self.listening_datetimes = []
+        self.is_finished = False
+        self.verdict = ""
+# У экземпляра должны быть следующие методы:
+    def set_a_listening_datetime(self, datetime_str: str, location: str):
+        session_info = {
+            'datetime': datetime_str,
+            'location': location,
+            'status': 'Запланировано'
+        }
+        self.listening_datetimes.append(session_info)
+        print(f"Заседание по делу {self.case_number} на {datetime_str} добавлено.")
+
+    def add_participant(self, participant_inn: str):
+        if participant_inn not in self.case_participants:
+            self.case_participants.append(participant_inn)
+            print(f"Участник с ИНН {participant_inn} добавлен в дело.")
+        else:
+            print(f"Участник с ИНН {participant_inn} уже есть в деле.")
+
+    def remove_participant(self, participant_inn: str):
+        if participant_inn in self.case_participants:
+            self.case_participants.remove(participant_inn)
+            print(f"Участник с ИНН {participant_inn} удален.")
+        else:
+            print(f"Ошибка: участника с ИНН {participant_inn} не было в деле.")
+
+    def make_a_decision(self, verdict_text: str):
+        self.verdict = verdict_text
+        self.is_finished = True
+        print(f"По делу {self.case_number} вынесено решение.")
+
+
+# КОД ДЛЯ ТЕСТИРОВАНИЯ
+
+print("Старт теста ")
+
+case_a40 = CourtCase(case_number="А40-12345/2025")
+print(f"Создано дело: {case_a40.case_number}")
+print(f"Статус: {'Завершено' if case_a40.is_finished else 'В процессе'}")
+print("-" * 20)
+
+# Добавляем участников
+case_a40.add_participant("7707083893")
+case_a40.add_participant("7704218559")
+print(f"Участники в деле: {case_a40.case_participants}")
+print("-" * 20)
+
+# Назначаем заседание
+case_a40.set_a_listening_datetime("2025-10-20 14:00", "Зал №10")
+print(f"Список заседаний: {case_a40.listening_datetimes}")
+print("-" * 20)
+
+# Выносим решение
+case_a40.make_a_decision("Иск удовлетворить в полном объеме.")
+print(f"Вердикт: {case_a40.verdict}")
+print(f"Статус дела: {'Завершено' if case_a40.is_finished else 'В процессе'}")
+
+print("--- Тестирование завершено ---")
