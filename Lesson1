@@ -1,0 +1,166 @@
+my_integer=10
+type(my_integer)
+my_float=5.5
+type(my_float)
+my_string='Hello World'
+my_string_2='HELLO WORLD'
+type(my_string_2)
+my_bool=True
+#my_bool=False
+type(my_bool)
+x=5
+y=1
+print(type(x>y))
+# преобразование типов
+salary = 1000
+print ('Ваша годовая зарплата составляет ' + str(salary) + ' условных единиц')
+print(1+2)
+print (my_string.upper())
+print (my_string.capitalize())
+print(my_string.replace ('Hello','Goodbay'))
+print(len(my_string))
+print (my_string[0])
+print(my_string[0:3:2])
+print(my_string[-4])
+target_string='Hello'
+if target_string in my_string:
+    print('find!')
+print(f'{my_string} is beautiful')
+month_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+income_list = [113000, 14000, 14300, 15000, 13800, 13000, 14900, 15200, 15300]
+income_by_months = [['Jan', 130001], ['Feb', 140001], ['Mar', 14300], ['Apr', 150001], ['May', 1380]]
+print(type(month_list))
+print(type(income_list))
+print(type(income_by_months))
+print(month_list[0:3])
+print(income_by_months)
+income_by_months=[['Jan', 13000], ['Feb', 14000], ['Mar', 14300], ['Apr', 15000], ['May', 13800]]
+income_by_months[0:2]=[['Jan', 13500], ['Feb', 140000]]
+print(income_by_months)
+print(income_by_months+income_list)
+first,second,third=['первый','второй','третий']
+print(first)
+first,*_first=['первый','второй','третий']
+print ('первый')
+first,*other,last=['первый','второй','третий','четвертый']
+print(other)
+del(income_by_months[-1])
+print(income_by_months)
+month_list.remove('Feb')
+print(month_list)
+month_list.append('Feb')
+print(month_list)
+income_list.insert(2,111111)
+print(income_list)
+print (income_list.count(13000))
+print(len(income_list))
+print(sum(income_list))
+print(max(income_list))
+print(sorted(income_list))
+queries_string='смотреть сериалы онлайн,новости спорта, афиша кино, курс доллара'
+queries_list=queries_string.split(',')
+print(queries_string)
+print(queries_list[0].split(' '))
+print(len(queries_list[0].split(' ')))
+print('\t'.join(['Столбец 1', 'Столбец 2', 'Столбец 3']))
+salary_tuple=(1000,2000,3000,4000,5000)
+print(list(salary_tuple))
+"""
+Задание 1. Работа с переменными.
+Создайте переменные и выведите их на экран.
+"""
+
+name = "Иван"
+age = 30
+is_lawyer = True
+
+print("Имя:", name)
+print("Возраст:", age)
+print("Юрист:", is_lawyer)
+
+"""
+Задание 2. Ввод данных от пользователя.
+Сохраняем их в переменные и выводим на экран.
+"""
+
+user_name = input("Введите ваше имя: ")
+user_age = input("Введите ваш возраст: ")
+
+print("Ваше имя:", user_name)
+print("Ваш возраст:", user_age)
+
+"""
+Задание 3. id() и изменение переменной.
+"""
+
+a = 5
+b = a
+print("ID a:", id(a))
+print("ID b:", id(b))
+
+a = 6
+print("ID a после изменения:", id(a))  # будет другой
+
+"""
+Задание 4. Перевод секунд в часы, минуты, секунды.
+"""
+
+seconds_input = input("Введите количество секунд: ")
+
+if seconds_input.isdigit():
+    total_seconds = int(seconds_input)
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+
+    print("Часы:", hours)
+    print("Минуты:", minutes)
+    print("Секунды:", seconds)
+else:
+    print("Ошибка: введите только число.")
+
+"""
+Задание 5. Сумма n + nn + nnn.
+"""
+
+n = input("Введите число от 1 до 9: ")
+
+if n.isdigit() and 1 <= int(n) <= 9:
+    n1 = int(n)
+    n2 = int(n * 2)
+    n3 = int(n * 3)
+    result = n1 + n2 + n3
+
+    print(f"{n1} + {n2} + {n3} = {result}")
+else:
+    print("Ошибка: введите число от 1 до 9.")
+
+"""
+Задание. Участники спора.
+Программа собирает данные об участниках через консоль и формирует список словарей.
+"""
+
+participants = []  # пустой список
+
+# Повторим ввод 3 раза
+for i in range(3):
+    print(f"\nВведите данные для участника №{i + 1}")
+
+    name = input("Наименование: ")
+    status = input("Статус (например, Истец, Ответчик): ")
+    inn = input("ИНН: ")
+
+    # создаём словарь для участника
+    participant = {
+        "name": name,
+        "status": status,
+        "inn": inn
+    }
+
+    # добавляем в общий список
+    participants.append(participant)
+
+# Выводим результат
+print("\nСписок участников спора:")
+for p in participants:
+    print(p)

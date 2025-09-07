@@ -1,0 +1,77 @@
+import json
+import csv
+import re
+from typing import List
+
+# 1. Получаем список ИНН из traders.txt
+with open('traders.txt', 'r', encoding='utf-8') as f_txt:
+    inns = [line.strip() for line in f_txt]
+    print(inns)
+
+# 2. Найдите информацию об организациях с этими ИНН в файле traders.json
+with open('traders.json', 'r', encoding='utf-8') as f_json:
+    data = json.load(f_json)
+    matches = [org for org in data if org.get('inn') in inns]
+
+print("Найдено организаций:", len(matches))
+for org in matches:
+    print(org)
+
+# 3. Отбираем только те записи, чей inn есть в нашем списке
+matches = [org for org in data if org.get('inn') in inns]
+
+# 4. Сохраняем в traders.csv колонки inn, ogrn и address
+with open('traders.csv', 'w', encoding='utf-8-sig', newline='') as f_csv:
+    writer = csv.writer(f_csv)
+    writer.writerow(['inn', 'ogrn', 'address'])
+    for org in matches:
+        writer.writerow([
+            org.get('inn', ''),
+            org.get('ogrn', ''),
+            org.get('address', '')
+        ])
+
+
+# Напишите регулярное выражение для поиска email-адресов в тексте:
+# ищет и возвращает список адресов, если не найдено, то выдает пустой
+
+def extract_emails(text: str) -> List[str]:
+    pattern = r'[\w\.-]+@[\w\.-]+\.\w+'
+    return re.findall(pattern, text)
+
+
+with open('1000_efrsb_messages.json', 'r', encoding='utf-8') as f:
+    messages = json.load(f)
+
+for msg in messages:
+    text = msg.get('msg_text', '')
+    emails = extract_emails(text)
+    if emails:
+        print(f"Case {msg['case_number']} Msg {msg['msg_number']}: {emails}")
+
+emails_by_inn = {}
+
+for msg in messages:
+    inn = msg.get('publisher_inn', '')
+    text = msg.get('msg_text', '')
+    found = extract_emails(text)
+    if not found:
+        continue
+
+    if inn not in emails_by_inn:
+        emails_by_inn[inn] = set()
+    emails_by_inn[inn].update(found)
+
+print("Всего ИНН:", len(emails_by_inn))
+print("Всего уникальных email’ов:", sum(len(emset) for emset in emails_by_inn.values()))
+
+import json
+
+with open('emails.json', 'w', encoding='utf-8') as f_out:
+    serializable = {inn: list(emails) for inn, emails in emails_by_inn.items()}
+    with open('emails.json', 'w', encoding='utf-8') as f_out:
+        json.dump(serializable, f_out, ensure_ascii=False, indent=2)
+import json
+with open('emails.json', 'w', encoding='utf-8') as f_out:
+    json.dump(serializable, f_out, ensure_ascii=False, indent=2)
+
