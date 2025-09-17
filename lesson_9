@@ -1,0 +1,57 @@
+#1
+import random
+
+my_step=random.randint (3,5)
+big_list=list(range(10,250000001,my_step))
+print (len (big_list))
+
+#2
+numbers_to_find = [random.randint(1, 1000) for i in range(10)]
+
+#3
+def find_linearly(list_to_search, what_to_find):
+    for item in list_to_search:
+        if item == what_to_find:
+            return True
+    return False
+
+#4
+def find_binarly(list_to_search, what_to_find):
+    low = 0
+    high = len(list_to_search) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        guess = list_to_search[mid]
+        if guess == what_to_find:
+            return True
+        elif guess > what_to_find:
+            high = mid - 1
+        else:
+            low = mid + 1
+
+    return False
+
+#5
+import time
+print("Начинаю 'быстрый' поиск...")
+start_time_bin = time.time()
+
+for num in numbers_to_find:
+    find_binarly(big_list, num)
+
+end_time_bin = time.time()
+binary_time = end_time_bin - start_time_bin # 'Сохраним' 'второе' 'время'
+
+print(f"Бинарный поиск 'занял': {binary_time} секунд.")
+
+# МЕДЛЕННЫЙ
+print("Начинаю 'медленный' (Линейный) поиск...")
+start_time = time.time()
+
+for num in numbers_to_find:
+    find_linearly(big_list, num)
+
+end_time = time.time()
+linear_time = end_time - start_time
+
+print(f"Линейный поиск 'занял': {linear_time} секунд.")
