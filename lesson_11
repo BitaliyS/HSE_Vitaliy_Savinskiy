@@ -1,0 +1,23 @@
+import requests
+
+# URL-адрес главной страницы сайта ЦБ РФ
+url = 'https://www.cbr.ru/'
+
+try:
+    # Выполнение GET-запроса к указанному URL
+    response = requests.get(url)
+
+    # Проверка успешности запроса (код ответа 200 означает "OK")
+    if response.status_code == 200:
+        print("Запрос к сайту ЦБ РФ выполнен успешно!")
+        print(f"Код ответа: {response.status_code}")
+        
+        # Вывод первых 500 символов HTML-кода страницы
+        print("\nНачало содержимого страницы:")
+        print(response.text[:500])
+    else:
+        print(f"Ошибка при выполнении запроса. Код ответа: {response.status_code}")
+
+except requests.exceptions.RequestException as e:
+    # Обработка возможных ошибок, связанных с сетевым взаимодействием
+    print(f"Произошла ошибка при подключении: {e}")
